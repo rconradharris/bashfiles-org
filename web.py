@@ -12,31 +12,37 @@ STABLE_URL = 'https://raw.github.com/rconradharris/bashfiles/stable/bashfiles'
 CACHE = {}
 
 
+def fetch_url(url):
+    return requests.get(url).text
+
+
 def fetch_and_cache_url(url):
     try:
         return CACHE[url]
     except KeyError:
         pass
 
-    data = requests.get(url).text
+    data = fetch_url(url)
     CACHE[url] = data
     return data
 
 
-def serve_url(url):
-    response = flask.make_response(fetch_and_cache_url(url))
+def serve_text(text):
+    response = flask.make_response(text)
     response.headers['content-type'] = 'text/plain'
     return response
 
 
 @app.route('/stable')
 def stable():
-    return serve_url(STABLE_URL)
+    # Do cache stable
+    return serve_text(fetch_and_cache_url(STABLE_URL))
 
 
 @app.route('/latest')
 def latest():
-    return serve_url(LATEST_URL)
+    # Don't cache latest
+    return serve_text(fetch_url(LATEST_URL))
 
 
 @app.route('/bashfiles')
