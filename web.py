@@ -18,24 +18,20 @@ def stable():
             'https://raw.github.com/rconradharris/bashfiles/stable/bashfiles')
 
 
-def _master():
-    return _serve_url_contents_as_text(
-            'https://raw.github.com/rconradharris/bashfiles/master/bashfiles')
+@app.route('/bashfiles')
+def bashfiles():
+    return stable()
 
 
 @app.route('/master')
 def master():
-    return master()
+    return _serve_url_contents_as_text(
+            'https://raw.github.com/rconradharris/bashfiles/master/bashfiles')
 
 
 @app.route('/latest')
 def latest():
-    return _master()
-
-
-@app.route('/bashfiles')
-def bashfiles():
-    return stable()
+    return master()
 
 
 @app.route('/')
