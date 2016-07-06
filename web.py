@@ -33,6 +33,12 @@ def serve_text(text):
     return response
 
 
+@app.route('/clear-cache', methods=['POST'])
+def clear_cache():
+    CACHE = {}
+    flask.abort(204)
+
+
 @app.route('/stable')
 def stable():
     # Do cache stable
